@@ -20,8 +20,7 @@ Thorough experimental results show that QuARF significantly and robustly improve
 
 <p align="center"><img src="assets/res_i2i.jpg" width="100%"/></p>
 
-<div align="center" style="display: flex; justify-content: center; gap: 20px;">
-    <img src="assets/res_sam.jpg" alt="Image 1" style="height: 300px; width: auto; border: 1px solid #ccc; border-radius: 8px;">
-    <img src="assets/res_AGAN.jpg" alt="Image 2" style="height: 300px; width: auto; border: 1px solid #ccc; border-radius: 8px;">
-</div>
+<p align="center"><img src="assets/res_SAM_AGAN.png" width="100%"/></p>
+
+
 
