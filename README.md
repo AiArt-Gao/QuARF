@@ -1,6 +1,8 @@
 # QuARF
 
-[AAAI-25] Quality-Adaptive Receptive Fields for Degraded Image Perception (QuARF)
+[AAAI-25] 
+Fei Gao\*, Ying Zhou\*, Ziyun Li, Wenwang Han, Jiaqi Shi, Maoying Qiao, Jinlan Xu, Nannan Wang, QUARF: Quality-Adaptive Receptive Fields for Degraded Image Perception, The 39th Annual AAAI Conference on Artificial Intelligence (AAAI), accepted, Philadelphia, Pennsylvania, USA, Feb. 25 – Mar. 4, 2025. 
+
 
 [![Project](https://img.shields.io/badge/Project-Page-green.svg)](https://github.com/AiArt-Gao/QuARF/)
 
