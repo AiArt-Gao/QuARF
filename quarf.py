@@ -11,22 +11,19 @@ class NoisyTopkRouter(nn.Module):
         self.num_experts = num_experts
         self.num_groups = num_groups
 
-        # 单一的路由层
+        
         self.route_linear = nn.Linear(n_embed, num_experts * num_groups)
         self.noise_linear = nn.Linear(n_embed, num_experts * num_groups)
 
     def forward(self, mh_output):
-        # mh_output shape: [batch_size, n_embed]
         batch_size = mh_output.shape[0]
 
         logits = self.route_linear(mh_output)
         noise_logits = self.noise_linear(mh_output)
 
-        # Adding scaled unit gaussian noise to the logits
         noise = torch.randn_like(logits) * F.softplus(noise_logits)
         noisy_logits = logits + noise
 
-        # Reshape to [batch_size, num_groups, num_experts]
         noisy_logits = noisy_logits.view(batch_size, self.num_groups, self.num_experts)
 
         top_k_logits, indices = noisy_logits.topk(self.top_k, dim=-1)
@@ -57,8 +54,7 @@ class QuARF(nn.Module):
     def forward(self, x, quality_feature):
 
         b, c, h, w = x.shape
-        # 使用路由器获取每个组的专家选择
-        router_output, indices = self.router(quality_feature)  # [b, num_groups, num_experts], [b, num_groups, top_k]
+        router_output, indices = self.router(quality_feature)  
 
         x_groups = x.chunk(self.num_groups, dim=1)
 
@@ -66,9 +62,8 @@ class QuARF(nn.Module):
         group_selections = []
         for group_idx, x_group in enumerate(x_groups):
             if self.mode == 'hard':
-                # print("hard")
-                # Hard selection: 只选择概率最高的专家
-                expert_indices = indices[:, group_idx, 0]  # [batch_size]
+                # Hard selection
+                expert_indices = indices[:, group_idx, 0]  
                 group_output = torch.zeros_like(x_group)
                 for i in range(b):
                     expert = self.experts[expert_indices[i]]
@@ -76,7 +71,7 @@ class QuARF(nn.Module):
                 group_selections.append(expert_indices.cpu().numpy())
 
             elif self.mode == 'soft':
-                # Soft selection: 使用所有专家的加权和
+                # Soft selection
                 group_output = torch.zeros_like(x_group)
                 for i in range(self.num_experts):
                     expert = self.experts[i]
