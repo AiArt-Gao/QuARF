@@ -26,3 +26,32 @@ Thorough experimental results show that QuARF significantly and robustly improve
 
 
 
+## Getting Started
+### 1) Get image quality feature
+- Refer to the official documentation of CONTRIQUE [here](https://github.com/pavancm/CONTRIQUE) and download the weights 
+  
+  You can also use other quality representations by other advanced BIQA models, but you need to modify the feature dimensions to make them match.
+
+  ```
+  from CONTRIQUE_model import CONTRIQUE_model
+  import numpy as np
+  
+  quality_model = CONTRIQUE_model(torchvision.models.resnet50(pretrained=False),2048)
+  quality_model.load_state_dict(torch.load(args.model_path, map_location=args.device.type))
+  quality_model.to(args.device)
+  quality_model.eval()
+
+   with torch.no_grad():
+        _,_, _, _, model_feat, model_feat_2, _, _ = quality_model(image, image_2)
+    quality_feat = np.hstack((model_feat.detach().cpu().numpy(),\
+                                model_feat_2.detach().cpu().numpy()))
+  ```
+### 2) Integrate it into the model
+
+```
+from quarf import QuARF
+## we prefer to insert it at the front end of the encoder.
+qconv = QuARF(in_channels = 64)
+```
+
+
